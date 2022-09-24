@@ -1,6 +1,12 @@
 from flask import Flask, render_template, request
 import smtplib
+from dotenv import load_dotenv
+import os
+load_dotenv()
 app = Flask(__name__)
+
+EMAIL = os.getenv('EMAIL')
+PASSWORD = os.getenv('PASSWORD')
 
 @app.route("/")
 def index():
@@ -25,7 +31,8 @@ def form():
     message = "You have been subscribed to my email newsletter"
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login("", )
+    server.login(EMAIL, PASSWORD)
+    server.sendmail(EMAIL, email, message)
 
     if not first_name or not last_name or not email:
         error_statement = "All form fields required"
